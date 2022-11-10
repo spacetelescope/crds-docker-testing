@@ -1,0 +1,33 @@
+#!/bin/bash -eu
+
+source scripts/image-config
+
+if [ ${CRDS_ROOT} != "none" ]; then
+    MOUNTS="--mount type=bind,source=$CRDS_ROOT,target=/home/developer/crds"
+else
+    MOUNTS = ""
+fi
+
+if [[ $CRDS_READONLY_CACHE == "1" && $CACHE_SRC == "/grp/crds/hst" ]]; then
+    source scripts/hst-crds-config 1
+    MOUNTS="${MOUNTS} --mount type=bind,source=$CACHE_SRC,target=/grp/crds/cache,readonly"
+else
+    source scripts/hst-crds-config 0
+    if [ $DOWNLOAD == 0 && $SYNC == 0 ]; then
+        MOUNTS="${MOUNTS} --mount type=bind,source="$(pwd)"/${CACHE_SRC},target=$CRDS_TEST_ROOT"
+    fi
+
+
+if [[ $CRDS_READONLY_CACHE == "0" && $CACHE_SRC != "/grp/crds/hst" ]]; then
+    source scripts/hst-crds-config
+    # if [ ${CRDS_TEST_ROOT} == /home/developer/cache_volumes ]; then
+    if [ $DOWNLOAD == 0 && $SYNC == 0 ]; then
+        MOUNTS="${MOUNTS} --mount type=bind,source="$(pwd)"/${CACHE_SRC},target=$CRDS_TEST_ROOT"
+    fi
+else
+    source scripts/crds-config-onsite
+    MOUNTS="${MOUNTS} --mount type=bind,source=$CACHE_SRC,target=/grp/crds/cache,readonly"
+fi
+
+# Run the container
+docker run ${RUN_PARS} --ip 0.0.0.0 --hostname localhost -p 8888:8888 $MOUNTS $DOCKER_IMAGE $*

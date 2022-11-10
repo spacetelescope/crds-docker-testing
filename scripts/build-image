@@ -1,0 +1,13 @@
+#! /bin/bash -x
+source scripts/image-config
+
+docker build -f Dockerfile -t ${DOCKER_IMAGE} \
+    --build-arg BASE_IMAGE=$BASE_IMAGE \
+    --build-arg CACHE_SRC=$CACHE_SRC \
+    --build-arg DOWNLOAD=$DOWNLOAD \
+    --build-arg SYNC=$SYNC \
+    --build-arg CRDS_REPO=$CRDS_REPO \
+    --build-arg CRDS_BRANCH=$CRDS_BRANCH \
+    --build-arg MAST_API_TOKEN=$MAST_API_TOKEN \
+    --build-arg CRDS_CONTEXT=$CRDS_CONTEXT \
+    .

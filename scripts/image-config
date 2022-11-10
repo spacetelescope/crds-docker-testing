@@ -1,0 +1,20 @@
+#!/bin/sh
+
+source scripts/user-config
+
+# advanced settings
+export IMAGE_REPO=alphasentaurii/crds
+export IMAGE_TAG=latest
+export DOCKER_IMAGE=${IMAGE_REPO}:${IMAGE_TAG}
+export CRDS_REPO=https://github.com/${GH_USER}/crds
+export BASE=library/debian
+export BASE_TAG=bullseye-slim
+export BASE_IMAGE=${BASE}:${BASE_TAG}
+export DEV_HOME="."
+export THOME=/home/developer
+export CRDS_TEST_ROOT=${THOME}/${CACHE_SRC}
+export CRDS_PATH=${CRDS_TEST_ROOT}/crds-cache-default-test
+export CRDS_TESTING_CACHE=${CRDS_TEST_ROOT}/crds-cache-test
+export CRDS_CONFIG_OFFSITE=1
+export CRDS_READONLY_CACHE=0
+export RUN_PARS="-it"

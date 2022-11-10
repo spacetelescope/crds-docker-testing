@@ -1,0 +1,22 @@
+#!/bin/sh
+base=`basename $(pwd)`
+if [ "${base}" == "scripts" ]; then
+    dpath=`dirname $(pwd)`
+    echo $dpath
+fi
+
+if [ "${base}" == "crds-docker-testing" ]; then
+        dpath=`pwd`
+        echo $dpath
+fi
+
+
+crds_repo_path="`dirname ${dpath}`/crds"
+if [ -d $crds_repo_path ]; then
+    echo "CRDS repo path found" && echo $crds_repo_path 
+else
+    echo "CRDS repo path does not exist"
+fi
+
+export SHOME=${dpath}
+export CRDS_ROOT=$crds_repo_path

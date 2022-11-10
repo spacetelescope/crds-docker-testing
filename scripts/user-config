@@ -1,0 +1,27 @@
+#!/bin/sh
+###########################################
+# USER SETTINGS - configure these as needed
+###########################################
+
+# your github username, e.g. "spacetelescope" (CRDS fork or repo)
+export GH_USER="alphasentaurii"
+export CRDS_BRANCH="master"
+
+# Put existing crds test suite cache data inside the cache_volumes folder if you
+# want these mounted into the container at runtime and set DOWNLOAD=0 and SYNC=0
+export CACHE_SRC="cache_volumes"
+export DOWNLOAD=1
+export SYNC=1
+
+# API Testing config (optional - not used in test suite)
+# optionally set MAST token as env var (for API testing, not main test suite)
+export MAST_API_TOKEN="abcde12345"
+export CRDS_CONTEXT="roman_0039.pmap"
+
+## abs local paths of this repo and crds client repo
+## used for shared folder mounting into the container
+## pathfinder script tries to find this for you automatically
+## otherwise you can comment out pathfinder and set them manually
+source scripts/pathfinder
+# export SHOME=${SHOME}
+# export CRDS_ROOT=${CRDS_ROOT}
