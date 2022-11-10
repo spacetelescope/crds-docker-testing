@@ -3,7 +3,7 @@
 source scripts/user-config
 
 # advanced settings
-export IMAGE_REPO=alphasentaurii/crds
+export IMAGE_REPO=alphasentaurii/crds-test-suite
 export IMAGE_TAG=latest
 export DOCKER_IMAGE=${IMAGE_REPO}:${IMAGE_TAG}
 export CRDS_REPO=https://github.com/${GH_USER}/crds

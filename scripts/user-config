@@ -4,7 +4,7 @@
 ###########################################
 
 # your github username, e.g. "spacetelescope" (CRDS fork or repo)
-export GH_USER="alphasentaurii"
+export GH_USER="spacetelescope"
 export CRDS_BRANCH="master"
 
 # Put existing crds test suite cache data inside the cache_volumes folder if you
@@ -15,8 +15,8 @@ export SYNC=1
 
 # API Testing config (optional - not used in test suite)
 # optionally set MAST token as env var (for API testing, not main test suite)
-export MAST_API_TOKEN="abcde12345"
-export CRDS_CONTEXT="roman_0039.pmap"
+export MAST_API_TOKEN=""
+export CRDS_CONTEXT=""
 
 ## abs local paths of this repo and crds client repo
 ## used for shared folder mounting into the container
