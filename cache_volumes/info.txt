@@ -1,0 +1,14 @@
+To mount existing crds cache test data into a running container, place the folders inside here.
+
+crds-cache-default-test
+crds-cache-test
+
+Set DOWNLOAD=0 to skip downloading crds-cache-test from github
+Set SYNC=0 to skip syncing crds-cache-default-test
+
+You can also overwrite these from within the container by running:
+$ CACHE_SRC=cache_volumes
+$ DOWNLOAD=1
+$ SYNC=1
+$ sh scripts/config-test-cache $CACHE_SRC $DOWNLOAD $SYNC
+
