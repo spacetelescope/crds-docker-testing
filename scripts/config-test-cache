@@ -23,7 +23,6 @@ fi
 
 chmod 755 $CRDS_TEST_ROOT
 
-
 if [ $SYNC_CACHE == 1 ]; then
     export CRDS_SERVER_URL=https://hst-crds.stsci.edu
     python -m crds.sync --all --stats --log-time --check-sha1sum --repair-files --organize=flat
