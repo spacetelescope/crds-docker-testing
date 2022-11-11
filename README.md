@@ -23,7 +23,7 @@ Pull existing image from Docker Hub, set custom run configs, then run the contai
 *Note: if you already have an existing test cache, it's highly recommended that you use OPTION 1A below, since running the test sync from scratch can take a very long time.*
 
 ```bash
-docker pull alphasentaurii/crds-test-suite:latest
+docker pull alphasentaurii/crds-docker-testing:latest
 
 # OPTION 1A: use existing crds-cache-test and crds-cache-default-test
 # Move/copy these into "cache_volumes" (will be mounted into container at runtime)
@@ -107,10 +107,9 @@ bash scripts/run-interactive
 
 ## Run the CRDS test suite
 
-From inside the running container, run the test suite like you would normally on your local machine.
+From inside the running container:
 
 ```bash
-cd crds
-./install
-./runtests
+# Run the test suite
+developer@localhost:~$ scripts/runtests
 ```

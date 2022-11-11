@@ -85,4 +85,6 @@ ARG DOWNLOAD=1
 ARG SYNC=1
 ARG TMP_CACHE=tmp_cache
 RUN scripts/config-test-cache $CACHE_SRC $DOWNLOAD $SYNC $TMP_CACHE
+ENV DOWNLOAD=0
+ENV SYNC=0
 CMD /bin/bash

@@ -1,10 +1,19 @@
 #!/bin/bash
 source $HOME/scripts/hst-crds-config
 source $HOME/scripts/image-config
-$HOME/scripts/config-cache-mount $CACHE_SRC
-cd $HOME/crds
+
+# check for mounted test cache, otherwise move cache to mount directory 
+${HOME}/scripts/config-cache-mount $CACHE_SRC
+
+# check crds installation
+resp=`crds list --status`
+status=`echo $resp | cut -f1 -d'='`
+if [[ -z $status ]]; then
+    # install crds (needed in most cases for mounted crds source code)
+    cd ${HOME}/crds && ./install && pip install -e .[submission,test,docs,synphot] 
+    pip install --upgrade .["submission","test"]
+fi
+
 ./runtests
-# CACHE_SRC=${1:-"cache_volumes"}
-# export CRDS_TEST_ROOT=${HOME}/${CACHE_SRC}
-# export CRDS_PATH=${CRDS_TEST_ROOT}/crds-cache-default-test
-# export CRDS_TESTING_CACHE=$CRDS_TEST_ROOT/crds-cache-test
+
+cd $HOME
