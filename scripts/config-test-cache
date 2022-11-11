@@ -1,21 +1,29 @@
 #!/bin/bash -x
-DEV_HOME=`pwd`
 CACHE_SRC=${1:-"cache_volumes"}
 DOWNLOAD_CACHE=${2:-0}
 SYNC_CACHE=${3:-0}
+TMP_CACHE=${4:-""}
+TIME=/usr/bin/time
 
-if [ "${CACHE_SRC}" == "/grp/crds/hst" ]; then
+if [[ "${CACHE_SRC}" == "/grp/crds/hst" ]]; then
     exit
 fi
 
-export CRDS_TEST_ROOT="${DEV_HOME}/${CACHE_SRC}"
+if [[ -z $TMP_CACHE ]]; then
+    export CRDS_TEST_ROOT="${HOME}/${CACHE_SRC}"
+else
+    export CRDS_TEST_ROOT="${HOME}/${TMP_CACHE}"
+fi
+
 export CRDS_PATH=$CRDS_TEST_ROOT/crds-cache-default-test
 export CRDS_TESTING_CACHE=$CRDS_TEST_ROOT/crds-cache-test
+source scripts/hst-crds-config
 
-# if [ $CRDS_TEST_ROOT != ${DEV_HOME}/cache_volumes ]; then
-# if [ ! -d "${CRDS_PATH}" &&  ]; then
-if [ $DOWNLOAD_CACHE == 1 ]; then
+if [[ $DOWNLOAD_CACHE == 1 ]]; then
     # setup fresh test cache directories similar to crds/setup_test_cache
+    if [[ -d $CRDS_TESTING_CACHE ]]; then
+        cd $CRDS_TEST_ROOT && rm -rf crds-cache-test
+    fi
     mkdir -p ${CRDS_TEST_ROOT}/crds-cache-default-test && cd $CRDS_TEST_ROOT
     git clone https://github.com/spacetelescope/crds-cache-test.git
     cd $DEV_HOME
@@ -23,14 +31,18 @@ fi
 
 chmod 755 $CRDS_TEST_ROOT
 
-if [ $SYNC_CACHE == 1 ]; then
-    export CRDS_SERVER_URL=https://hst-crds.stsci.edu
-    python -m crds.sync --all --stats --log-time --check-sha1sum --repair-files --organize=flat
-    python -m crds.sync --files l2d0959cj_pfl.fits n7p1032ao_apt.fits q5417413o_pct.fits xaf1429el_wcp.fits y2r1559to_apt.fits y2r16006o_pct.fits y951738kl_hv.fits yas2005el_hv.fits p7d1548qj_idc.fits 3241637sm_tmt.fits 41g16069m_tmg.fits 43h1909cm_tmc.fits 43h1240om_tmc.fits --stats --log-time
-    python -m crds.sync --contexts hst_cos.imap --fetch-references --log-time --stats
+if [[ $SYNC_CACHE == 1 ]]; then
+    resp=`crds list --status`
+    status=`echo $resp | cut -f1 -d'='`
+    if [[ -z $status ]]; then
+        cd ${HOME}/crds && ./install && pip install -e .[submission,test,docs,synphot] 
+        pip install --upgrade .["submission","test"] && cd $HOME
+    fi
+    hstlog=${HOME}/hstsync.log
+    cd $CRDS_TEST_ROOT
+    set -o pipefail && $TIME --verbose -o $hstlog ${HOME}/scripts/hst-sync
 
-    export CRDS_SERVER_URL=https://jwst-crds.stsci.edu
-    python -m crds.sync --all --stats --log-time --check-sha1sum --repair-files --organize=flat
-    python -m crds.sync --files jwst_niriss_flat_0000.fits jwst_miri_flat_0006.fits --stats --log-time
-
+    jwstlog=${HOME}/jwstsync.log
+    set -o pipefail && $TIME --verbose -o $jwstlog ${HOME}/scripts/jwst-sync
+    cd $HOME
 fi

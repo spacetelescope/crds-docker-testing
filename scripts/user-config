@@ -3,20 +3,21 @@
 # USER SETTINGS - configure these as needed
 ###########################################
 
-# your github username, e.g. "spacetelescope" (CRDS fork or repo)
-export GH_USER="spacetelescope"
-export CRDS_BRANCH="master"
-
 # Put existing crds test suite cache data inside the cache_volumes folder if you
-# want these mounted into the container at runtime and set DOWNLOAD=0 and SYNC=0
+# want these mounted into the container at runtime
 export CACHE_SRC="cache_volumes"
+# If you don't have the crds test cache data or want to start fresh, set these = 1
+# DOWNLOAD=1 : clones github.com/spacetelescope/crds-test-cache 
 export DOWNLOAD=1
+# SYNC=1 : runs crds.sync for crds-default-test-cache 
 export SYNC=1
 
 # API Testing config (optional - not used in test suite)
 # optionally set MAST token as env var (for API testing, not main test suite)
 export MAST_API_TOKEN=""
-export CRDS_CONTEXT=""
+export CRDS_CONTEXT="hst_1006.pmap"
+export CRDS_SERVER_URL="https://hst-crds.stsci.edu"
+
 
 ## abs local paths of this repo and crds client repo
 ## used for shared folder mounting into the container

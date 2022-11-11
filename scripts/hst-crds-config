@@ -1,7 +1,7 @@
-READONLY=${1-:0}
+#!/bin/bash
 
-# READONLY = 0
-# CRDS_CONFIG_OFFSITE (DEFAULT - custom crds cache source)
+# CRDS_READONLY_CACHE = 0 (DEFAULT - used for testing)
+# CRDS_CONFIG_OFFSITE (custom crds cache source)
 # This is useful offsite when working on a small scale with a personal computer.
 # Because this downloads CRDS files directly to a local cache,  once downloaded
 # files are accessed from local disk rather than from VPN or the CRDS server,
@@ -13,11 +13,11 @@ READONLY=${1-:0}
 # Central Store but will suffer from repeat downloads via VPN if Central Store
 # files are not effectively cached on offsite computers.
 
-if [ $READONLY = 0 ]; then
+if [[ "${CRDS_READONLY_CACHE}" == 0||""||"0" ]]; then
     # Configure CRDS for offsite use with a dynamic reference file cache.
     export CRDS_READONLY_CACHE=0
     export CRDS_SERVER_URL=https://hst-crds.stsci.edu
-    export CRDS_PATH=${HOME}/crds_cache
+    # export CRDS_PATH=${HOME}/cache_volumes
     export iref=${CRDS_PATH}/references/hst/wfc3/
     export jref=${CRDS_PATH}/references/hst/acs/
     export oref=${CRDS_PATH}/references/hst/stis/

@@ -10,4 +10,6 @@ docker build -f Dockerfile -t ${DOCKER_IMAGE} \
     --build-arg CRDS_BRANCH=$CRDS_BRANCH \
     --build-arg MAST_API_TOKEN=$MAST_API_TOKEN \
     --build-arg CRDS_CONTEXT=$CRDS_CONTEXT \
+    --build-arg CRDS_PATH=$CRDS_PATH \
+    --build-arg CRDS_TEST_ROOT=$CRDS_TEST_ROOT
     .

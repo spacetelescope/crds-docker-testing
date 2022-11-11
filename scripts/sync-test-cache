@@ -1,0 +1,11 @@
+#!/bin/bash -x
+CACHE_SRC=${1:-"cache_volumes"}
+DOWNLOAD_CACHE=${2:-0}
+SYNC_CACHE=${3:-0}
+TMP_CACHE=${4:-""}
+TIME=/usr/bin/time
+logfile="${HOME}/sync.log"
+
+set -o pipefail && $TIME --verbose -o $logfile ${HOME}/scripts/config-test-cache $CACHE_SRC $DOWNLOAD_CACHE $SYNC_CACHE $TMP_CACHE
+sync_exit_status=$?
+echo "Sync exit status ${sync_exit_status}"

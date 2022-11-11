@@ -14,7 +14,6 @@ RUN apt update && \
         python3 \
         python3-pip \
         python3-venv \
-        rsync \
         sudo \
         tcsh \
         make \
@@ -39,21 +38,22 @@ WORKDIR /home/developer
 RUN python3 -m venv /home/developer/venv
 ENV PATH=/home/developer/venv/bin:${PATH}
 ENV LD_LIBRARY_PATH=/home/developer/venv/LD_LIBRARY_PATH
-
+COPY requirements.txt ${DEV_HOME}/.
 RUN pip install --upgrade pip && \
-  pip install \
-    wheel \
-    psutil~=5.7.2 \
-    pysynphot==2.0.0 \
-    roman_datamodels \
-    stsynphot~=1.1.0 \
-    git+https://github.com/spacetelescope/jwst && \
-    jupyter \
-  pip uninstall --yes crds
+    pip install -r ${DEV_HOME}/requirements.txt && \
+  # pip install \
+  #   wheel \
+  #   psutil~=5.7.2 \
+  #   pysynphot==2.0.0 \
+  #   roman_datamodels \
+  #   stsynphot~=1.1.0 \
+  #   git+https://github.com/spacetelescope/jwst \
+  #   jupyter && \
+    pip uninstall --yes crds
 
 WORKDIR /home/developer
 # CRDS client repo, crds cache folder, crds test cache "default" folder
-ADD scripts/ /home/developer/scripts
+ADD scripts/ ${DEV_HOME}/scripts
 # editable install (for making changes on the fly)
 ARG CRDS_REPO=https://github.com/spacetelescope/crds
 ARG CRDS_BRANCH=master
@@ -63,15 +63,26 @@ RUN chown -R developer:developer /home/developer && chmod +x /home/developer/scr
 # run test cache setup
 USER developer
 WORKDIR /home/developer
-ARG CACHE_SRC=cache_volumes
-ARG DOWNLOAD=0
-ARG SYNC=0
-RUN scripts/config-test-cache $CACHE_SRC $DOWNLOAD $SYNC 
-RUN cd crds && ./install && pip install -e .[submission,test,docs,synphot]
-
-ARG MAST_API_TOKEN
-ENV MAST_API_TOKEN=${MAST_API_TOKEN}
+RUN cd crds && ./install --dev && cd $DEV_HOME
+#&& pip install -e .[submission,test,docs,synphot]
 ARG CRDS_CONTEXT
 ENV CRDS_CONTEXT=${CRDS_CONTEXT}
+ARG CACHE_SRC=cache_volumes
+ENV CACHE_SRC=$CACHE_SRC
+ARG CRDS_TEST_ROOT=/home/developer/$CACHE_SRC
+ENV CRDS_TEST_ROOT=$CRDS_TEST_ROOT
+ARG CRDS_PATH=$CRDS_TEST_ROOT/crds-cache-default-test
+ARG CRDS_CONFIG_OFFSITE=1
+ENV CRDS_CONFIG_OFFSITE=$CRDS_CONFIG_OFFSITE
+ARG CRDS_READONLY_CACHE=0
+ARG CRDS_READONLY_CACHE=$CRDS_READONLY_CACHE
+ENV CRDS_PATH=$CRDS_PATH
+ARG MAST_API_TOKEN
+ENV MAST_API_TOKEN=${MAST_API_TOKEN}
 
+ARG CRDS_TESTING_CACHE=$CRDS_TEST_ROOT/crds-cache-test
+ARG DOWNLOAD=1
+ARG SYNC=1
+ARG TMP_CACHE=tmp_cache
+RUN scripts/config-test-cache $CACHE_SRC $DOWNLOAD $SYNC $TMP_CACHE
 CMD /bin/bash
