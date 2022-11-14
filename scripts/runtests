@@ -9,7 +9,7 @@ ${HOME}/scripts/config-cache-mount $CACHE_SRC
 resp=`crds list --status`
 status=`echo $resp | cut -f1 -d'='`
 if [[ -z $status ]]; then
-    # install crds (needed in most cases for mounted crds source code)
+    # install mounted crds source code
     cd ${HOME}/crds && ./install && pip install -e .[submission,test,docs,synphot] 
     pip install --upgrade .["submission","test"]
 fi

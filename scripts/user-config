@@ -8,9 +8,9 @@
 export CACHE_SRC="cache_volumes"
 # If you don't have the crds test cache data or want to start fresh, set these = 1
 # DOWNLOAD=1 : clones github.com/spacetelescope/crds-test-cache 
-export DOWNLOAD=1
+export DOWNLOAD=0
 # SYNC=1 : runs crds.sync for crds-default-test-cache 
-export SYNC=1
+export SYNC=0
 
 # API Testing config (optional - not used in test suite)
 # optionally set MAST token as env var (for API testing, not main test suite)
@@ -18,11 +18,12 @@ export MAST_API_TOKEN=""
 export CRDS_CONTEXT="hst_1006.pmap"
 export CRDS_SERVER_URL="https://hst-crds.stsci.edu"
 
-
-## abs local paths of this repo and crds client repo
-## used for shared folder mounting into the container
-## pathfinder script tries to find this for you automatically
-## otherwise you can comment out pathfinder and set them manually
+## *** If CRDS is in a different location than this repo, you can just
+## *** comment out `source scripts/pathfinder` and set the paths explicitly
+## pathfinder script tries to find abs local paths of this repo and crds client
+## for shared folder mounting into the container
 source scripts/pathfinder
-# export SHOME=${SHOME}
-# export CRDS_ROOT=${CRDS_ROOT}
+## abs local path to this repo
+# export SHOME=/top/path/to/this/code
+## abs local path to CRDS client source code
+# export CRDS_ROOT=/abs/path/to/my/crds/client/code
