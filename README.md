@@ -6,7 +6,7 @@ Mount your own fork of the CRDS client to run the test suite with live code chan
 
 ## Installation and Setup
 
-**Clone this repo into the same parent directory as your CRDS client code so they are at the same directory level. Otherwise you'll need to set the path to CRDS code explicitly by editing `crds-docker-testing/scripts/user-config`. The crds code in the pre-built image is from spacetelescope/crds master branch. This gets overwritten by whatever CRDS folder you mount at runtime.**
+Clone this repo into the same parent directory as your CRDS client code so they are at the same directory level. Otherwise you'll need to set the path to CRDS code explicitly by editing `crds-docker-testing/scripts/user-config`. The crds code in the pre-built image is from spacetelescope/crds master branch. This gets overwritten by whatever CRDS folder you mount at runtime.
 
 ```bash
 cd /path/to/crds/parentdir/
@@ -29,18 +29,29 @@ export SHOME=/top/path/to/this/repo
 
 **Pull or build the docker image**
 
-PULL:Simple (OPTION 1)
-1. Pull image (simplest)
-    a. use built-in test cache
-    b. mount your own existing test cache
-2. Run container
-3. Run test suite
+PULL (OPTION 1 - simplest)
 
-BUILD:Advanced (OPTION 2)
-1. customize env vars
-2. build image (allows customization)
-3. run container
-3. run test suite
+    1. Pull image
+
+        a. use built-in test cache
+
+        b. mount your own existing test cache
+
+    2. Run container
+
+    3. Run test suite
+
+
+BUILD (OPTION 2 - advanced/customizable)
+
+    1. Customize env vars
+
+    2. Build image
+
+    3. Run container
+
+    3. Run test suite
+
 
 *NOTE: `cache_volumes` will be mounted in the running container. This means anything else you need for testing can be made accessible by placing it in this folder. E.g. for API testing, you can run a jupyter notebook inside the container and view it in a browser over port 8888.*
 
@@ -81,6 +92,15 @@ $ mv crds-cache-test/ crds-docker-testing/cache_volumes/.
 ```bash
 # Run the container
 $ cd crds-docker-testing
+
+$ vi scripts/user-config
+### user-config ###
+# if you pulled the "slim" docker image, make sure this is set in scripts/user-config
+# select which image tag to pull/build/run (if building image this can be anything)
+export IMAGE_TAG="slim"
+# export IMAGE_TAG="latest"
+###
+
 $ bash scripts/run-interactive
 ```
 
@@ -101,23 +121,28 @@ Customize the user settings to your crds client repo/fork etc.
 
 *OPTION 2A) mount existing cache*
 
-If you'd prefer to mount an existing test cache, move these into the "cache_volumes" folder and leave DOWNLOAD=0, SYNC=0 (default).
+If you already have  `crds-cache-default-test` and `crds-cache-test` installed locally and want to mount these into the container instead of redownloading, resyncing, leave DOWNLOAD=0, SYNC=0 (default) and move/copy these directories into the "cache_volumes" folder.
+
+Default settings in `scripts/user-config` are DOWNLOAD=0, SYNC=0. This skips the download and sync of test cache data.
 
 ```bash
 $ cd crds-docker-testing
 $ vi scripts/user-config
-```
-
-If you already have  `crds-cache-default-test` and `crds-cache-test` installed locally and want to mount these into the container instead of redownloading, resyncing, leave DOWNLOAD=0, SYNC=0 (default).
-
-```bash
 ########## scripts/user-config ##########
 export DOWNLOAD=0
 export SYNC=0
 ########################################
 ```
 
-**NOTE: config-test-cache script can be run from inside the running container even if you didn't use that option when you initially built the docker image.**
+**NOTE: If you have any issues with your mounted data, the `sync-test-cache` script can be run from inside the running container.**
+
+```bash
+developer@localhost:~$ CACHE_SRC=cache_volumes
+developer@localhost:~$ DOWNLOAD=0
+developer@localhost:~$ SYNC=1
+developer@localhost:~$ scripts/sync-test-cache $CACHE_SRC $DOWNLOAD $SYNC
+```
+
 
 *OPTION 2B) DOWNLOAD/SYNC NEW CACHE (~17 mins)*
 
@@ -129,6 +154,9 @@ For this, you'll need to set DOWNLOAD=1, SYNC=1
 ########## scripts/user-config ##########
 export DOWNLOAD=1
 export SYNC=1
+
+# tag can be anything you want
+export IMAGE_TAG="latest"
 ########################################
 ```
 
@@ -138,8 +166,8 @@ export SYNC=1
 Once the settings are configured to your liking, build the image.
 
 ```bash
-cd crds-docker-testing
-bash scripts/build-image
+$ cd crds-docker-testing
+$ bash scripts/build-image
 ```
 
 
@@ -148,8 +176,8 @@ bash scripts/build-image
 After the image is built, run a container.
 
 ```bash
-cd crds-docker-testing
-bash scripts/run-interactive
+$ cd crds-docker-testing
+$ bash scripts/run-interactive
 ```
 
 **4. Run the Test Suite**
@@ -159,4 +187,15 @@ From inside the running container:
 ```bash
 # Run the test suite
 developer@localhost:~$ scripts/runtests
+```
+
+If you get failures like "jwst_1015.pmap" could not be found, you likely need to re-sync your test data.
+
+Set the CRDS_CONTEXT to e.g. "hst_edit.pmap" or "jwst_edit.pmap" and run sync:
+
+```bash
+developer@localhost:~$ CACHE_SRC=cache_volumes
+developer@localhost:~$ DOWNLOAD=0
+developer@localhost:~$ SYNC=1
+developer@localhost:~$ scripts/sync-test-cache $CACHE_SRC $DOWNLOAD $SYNC
 ```

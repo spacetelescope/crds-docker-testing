@@ -1,5 +1,4 @@
 #!/bin/bash -eu
-
 source scripts/image-config
 source scripts/hst-crds-config
 

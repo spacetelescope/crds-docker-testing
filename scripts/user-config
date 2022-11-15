@@ -3,6 +3,10 @@
 # USER SETTINGS - configure these as needed
 ###########################################
 
+# select which image tag to pull/build/run (if building image this can be anything)
+export IMAGE_TAG="slim"
+# export IMAGE_TAG="latest"
+
 # Put existing crds test suite cache data inside the cache_volumes folder if you
 # want these mounted into the container at runtime
 export CACHE_SRC="cache_volumes"
@@ -15,7 +19,7 @@ export SYNC=0
 # API Testing config (optional - not used in test suite)
 # optionally set MAST token as env var (for API testing, not main test suite)
 export MAST_API_TOKEN=""
-export CRDS_CONTEXT="hst_1006.pmap"
+export CRDS_CONTEXT=""
 export CRDS_SERVER_URL="https://hst-crds.stsci.edu"
 
 ## *** If CRDS is in a different location than this repo, you can just
