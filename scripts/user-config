@@ -6,10 +6,10 @@
 ##### image tag #####
 # select or enter an image tag ("latest", "slim", or custom)
 
-## "latest" : built-in test data
+## "latest" : built-in test data  (4.26 GB)
 export IMAGE_TAG="latest"
 
-## "slim" : no test data (mount your own)
+## "slim" : mount your existing test data directories (3.34 GB)
 # export IMAGE_TAG="slim"
 
 ## enter a custom tag if building image (or use "latest")
