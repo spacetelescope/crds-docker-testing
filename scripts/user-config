@@ -1,33 +1,45 @@
-#!/bin/sh
+#!/bin/bash
 ###########################################
 # USER SETTINGS - configure these as needed
 ###########################################
 
-# select which image tag to pull/build/run (if building image this can be anything)
-export IMAGE_TAG="slim"
-# export IMAGE_TAG="latest"
+##### image tag #####
+# select or enter an image tag ("latest", "slim", or custom)
 
-# Put existing crds test suite cache data inside the cache_volumes folder if you
+## "latest" : built-in test data
+export IMAGE_TAG="latest"
+
+## "slim" : no test data (mount your own)
+# export IMAGE_TAG="slim"
+
+## enter a custom tag if building image (or use "latest")
+# export IMAGE_TAG=
+
+##### test suite data #####
+# Put existing crds test suite cache data inside the "cache_volumes" folder if you
 # want these mounted into the container at runtime
 export CACHE_SRC="cache_volumes"
 # If you don't have the crds test cache data or want to start fresh, set these = 1
 # DOWNLOAD=1 : clones github.com/spacetelescope/crds-test-cache 
-export DOWNLOAD=0
+export DOWNLOAD=1
 # SYNC=1 : runs crds.sync for crds-default-test-cache 
-export SYNC=0
+export SYNC=1
 
-# API Testing config (optional - not used in test suite)
-# optionally set MAST token as env var (for API testing, not main test suite)
+##### API Testing config (optional - not used in test suite) #####
+# optionally set MAST token as env var (for API testing/jupyter)
 export MAST_API_TOKEN=""
 export CRDS_CONTEXT=""
-export CRDS_SERVER_URL="https://hst-crds.stsci.edu"
+export CRDS_SERVER_URL=""
 
-## *** If CRDS is in a different location than this repo, you can just
-## *** comment out `source scripts/pathfinder` and set the paths explicitly
+##### mounting CRDS client code #####
 ## pathfinder script tries to find abs local paths of this repo and crds client
 ## for shared folder mounting into the container
 source scripts/pathfinder
-## abs local path to this repo
+## *** If CRDS is in a different location than this repo, you can just
+## *** comment out `source scripts/pathfinder` and set the paths explicitly
+
+## abs local path to this repo:
 # export SHOME=/top/path/to/this/code
-## abs local path to CRDS client source code
+
+## abs local path to CRDS client source code:
 # export CRDS_ROOT=/abs/path/to/my/crds/client/code

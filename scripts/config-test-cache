@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash
 CACHE_SRC=${1:-"cache_volumes"}
 DOWNLOAD_CACHE=${2:-0}
 SYNC_CACHE=${3:-0}
@@ -17,7 +17,7 @@ fi
 
 export CRDS_PATH=$CRDS_TEST_ROOT/crds-cache-default-test
 export CRDS_TESTING_CACHE=$CRDS_TEST_ROOT/crds-cache-test
-source scripts/hst-crds-config
+source ${HOME}/scripts/hst-crds-config
 
 if [[ $DOWNLOAD_CACHE == 1 ]]; then
     # setup fresh test cache directories similar to crds/setup_test_cache

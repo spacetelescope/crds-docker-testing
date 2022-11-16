@@ -1,19 +1,34 @@
 #!/bin/bash
-source $HOME/scripts/hst-crds-config
-source $HOME/scripts/image-config
+source ${HOME}/scripts/hst-crds-config
+source ${HOME}/scripts/image-config
 
 # check for mounted test cache, otherwise move cache to mount directory 
 ${HOME}/scripts/config-cache-mount $CACHE_SRC
 
 # check crds installation
+
+if [[ -z $CRDS_SERVER_URL ]]; then
+    export CRDS_SERVER_URL=https://hst-crds.stsci.edu
+fi
+
+if [[ -z $CRDS_CONTEXT ]]; then
+    export CRDS_CONTEXT=hst_1048.pmap
+fi
+
+echo "CRDS_SERVER_URL: ${CRDS_SERVER_URL}"
+echo "CRDS_CONTEXT: ${CRDS_CONTEXT}"
+
 resp=`crds list --status`
 status=`echo $resp | cut -f1 -d'='`
+
+cd ${HOME}/crds
+
 if [[ -z $status ]]; then
+    echo "Installing CRDS client code"
     # install mounted crds source code
-    cd ${HOME}/crds && ./install && pip install -e .[submission,test,docs,synphot] 
+    ./install && pip install -e .[submission,test,docs,synphot] 
     pip install --upgrade .["submission","test"]
 fi
 
 ./runtests
-
 cd $HOME

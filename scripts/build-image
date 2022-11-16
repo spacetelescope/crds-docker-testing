@@ -1,5 +1,13 @@
-#! /bin/bash -x
+#!/bin/bash
 source scripts/image-config
+
+if [[ -z $CRDS_SERVER_URL ]]; then
+    CRDS_SERVER_URL="https://hst-crds.stsci.edu"
+fi
+
+if [[ -z $CRDS_CONTEXT ]]; then
+    CRDS_CONTEXT="hst_1048.pmap"
+fi
 
 docker build -f Dockerfile -t ${DOCKER_IMAGE} \
     --build-arg BASE_IMAGE=$BASE_IMAGE \
@@ -12,4 +20,5 @@ docker build -f Dockerfile -t ${DOCKER_IMAGE} \
     --build-arg CRDS_CONTEXT=$CRDS_CONTEXT \
     --build-arg CRDS_PATH=$CRDS_PATH \
     --build-arg CRDS_TEST_ROOT=$CRDS_TEST_ROOT \
+    --build-arg CRDS_SERVER_URL=$CRDS_SERVER_URL \
     .

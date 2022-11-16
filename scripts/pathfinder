@@ -1,11 +1,11 @@
 #!/bin/bash
 base=`basename $(pwd)`
-if [[ "${base}" == "scripts" ]]; then
+if [[ "${base}" == scripts ]]; then
     dpath=`dirname $(pwd)`
     echo $dpath
 fi
 
-if [[ "${base}" == "crds-docker-testing"||"developer" ]]; then
+if [[ "${base}" == crds-docker-testing||developer ]]; then
         dpath=`pwd`
         echo $dpath
 fi

@@ -1,0 +1,7 @@
+#!/bin/bash
+
+source scripts/image-config
+
+# docker pull alphasentaurii/crds-docker-testing:slim
+
+docker pull $DOCKER_IMAGE

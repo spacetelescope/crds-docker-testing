@@ -41,14 +41,6 @@ ENV LD_LIBRARY_PATH=/home/developer/venv/LD_LIBRARY_PATH
 COPY requirements.txt ${DEV_HOME}/.
 RUN pip install --upgrade pip && \
     pip install -r ${DEV_HOME}/requirements.txt && \
-  # pip install \
-  #   wheel \
-  #   psutil~=5.7.2 \
-  #   pysynphot==2.0.0 \
-  #   roman_datamodels \
-  #   stsynphot~=1.1.0 \
-  #   git+https://github.com/spacetelescope/jwst \
-  #   jupyter && \
     pip uninstall --yes crds
 
 WORKDIR /home/developer
@@ -64,27 +56,32 @@ RUN chown -R developer:developer /home/developer && chmod +x /home/developer/scr
 USER developer
 WORKDIR /home/developer
 RUN cd crds && ./install --dev && cd $DEV_HOME
-#&& pip install -e .[submission,test,docs,synphot]
-ARG CRDS_CONTEXT
-ENV CRDS_CONTEXT=${CRDS_CONTEXT}
+# Set ENVIRONMENT vars
+ARG CRDS_CONFIG_OFFSITE=1
+ENV CRDS_CONFIG_OFFSITE=$CRDS_CONFIG_OFFSITE
+ARG CRDS_READONLY_CACHE=0
+ENV CRDS_READONLY_CACHE=$CRDS_READONLY_CACHE
+ARG MAST_API_TOKEN
+ENV MAST_API_TOKEN=$MAST_API_TOKEN
+ARG CRDS_CONTEXT=hst_1048.pmap
+ENV CRDS_CONTEXT=$CRDS_CONTEXT
+ARG CRDS_SERVER_URL=https://hst-crds.stsci.edu
+ENV CRDS_SERVER_URL=$CRDS_SERVER_URL
+
 ARG CACHE_SRC=cache_volumes
 ENV CACHE_SRC=$CACHE_SRC
 ARG CRDS_TEST_ROOT=/home/developer/$CACHE_SRC
 ENV CRDS_TEST_ROOT=$CRDS_TEST_ROOT
-ARG CRDS_PATH=$CRDS_TEST_ROOT/crds-cache-default-test
-ARG CRDS_CONFIG_OFFSITE=1
-ENV CRDS_CONFIG_OFFSITE=$CRDS_CONFIG_OFFSITE
-ARG CRDS_READONLY_CACHE=0
-ARG CRDS_READONLY_CACHE=$CRDS_READONLY_CACHE
-ENV CRDS_PATH=$CRDS_PATH
-ARG MAST_API_TOKEN
-ENV MAST_API_TOKEN=${MAST_API_TOKEN}
-
 ARG CRDS_TESTING_CACHE=$CRDS_TEST_ROOT/crds-cache-test
+ENV CRDS_TESTING_CACHE=$CRDS_TESTING_CACHE
+ARG CRDS_PATH=$CRDS_TEST_ROOT/crds-cache-default-test
+ENV CRDS_PATH=$CRDS_PATH
+
+# Get test cache data if requested
 ARG DOWNLOAD=1
 ARG SYNC=1
-ARG TMP_CACHE=tmp_cache
-RUN scripts/config-test-cache $CACHE_SRC $DOWNLOAD $SYNC $TMP_CACHE
+RUN scripts/sync-test-cache $CACHE_SRC $DOWNLOAD $SYNC tmp_cache
+# reset download/sync to zero
 ENV DOWNLOAD=0
 ENV SYNC=0
 CMD /bin/bash
