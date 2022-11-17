@@ -1,2 +1,9 @@
+# Include
+cache_volumes/!*info.txt
+cache_volumes/!*submission-api.ipynb
+# Exclude
+.DS_Store
 cache_volumes/crds-cache-default-test
 cache_volumes/crds-cache-test
+cache_volumes/api-rkein
+cache_volumes/testdata

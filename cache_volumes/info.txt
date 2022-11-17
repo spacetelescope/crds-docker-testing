@@ -11,3 +11,7 @@ $ CACHE_SRC=cache_volumes
 $ DOWNLOAD=1
 $ SYNC=1
 $ sh scripts/config-test-cache $CACHE_SRC $DOWNLOAD $SYNC
+
+----
+
+The API-testing folder contains a jupyter-notebook with some starter code for doing additional custom tests/troubleshooting for things like reference file submissions. With cache_volumes mounted in the container, any files you add to it while the container is running will be accessible to the notebook.
