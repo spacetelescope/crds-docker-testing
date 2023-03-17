@@ -7,10 +7,10 @@
 # select or enter an image tag ("latest", "slim", or custom)
 
 ## "latest" : built-in test data  (4.26 GB)
-export IMAGE_TAG="latest"
+# export IMAGE_TAG="latest"
 
 ## "slim" : mount your existing test data directories (3.34 GB)
-# export IMAGE_TAG="slim"
+export IMAGE_TAG="slim"
 
 ## enter a custom tag if building image (or use "latest")
 # export IMAGE_TAG=
@@ -21,9 +21,9 @@ export IMAGE_TAG="latest"
 export CACHE_SRC="cache_volumes"
 # If you don't have the crds test cache data or want to start fresh, set these = 1
 # DOWNLOAD=1 : clones github.com/spacetelescope/crds-test-cache 
-export DOWNLOAD=1
+export DOWNLOAD=0
 # SYNC=1 : runs crds.sync for crds-default-test-cache 
-export SYNC=1
+export SYNC=0
 
 ##### API Testing config (optional - not used in test suite) #####
 # optionally set MAST token as env var (for API testing/jupyter)
