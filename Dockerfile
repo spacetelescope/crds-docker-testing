@@ -24,7 +24,8 @@ RUN apt update && \
         tar \
         curl \
         time \
-        vim
+        vim \
+        awscli
 
 RUN useradd -s /bin/bash -m developer && usermod -aG sudo developer
 ENV DEV_HOME=/home/developer
