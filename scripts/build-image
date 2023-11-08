@@ -6,7 +6,7 @@ if [[ -z $CRDS_SERVER_URL ]]; then
 fi
 
 if [[ -z $CRDS_CONTEXT ]]; then
-    CRDS_CONTEXT="hst_1048.pmap"
+    CRDS_CONTEXT="hst-operational"
 fi
 
 docker build -f Dockerfile -t ${DOCKER_IMAGE} \

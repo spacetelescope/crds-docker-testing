@@ -5,22 +5,11 @@ source ${HOME}/scripts/image-config
 # check for mounted test cache, otherwise move cache to mount directory 
 ${HOME}/scripts/config-cache-mount $CACHE_SRC
 
-# check crds installation
-
 if [[ -z $CRDS_SERVER_URL ]]; then
     export CRDS_SERVER_URL=https://hst-crds.stsci.edu
 fi
 
-if [[ -z $CRDS_CONTEXT ]]; then
-    summary=`crds list --status`
-    context_num=`echo $summary | cut -f8 -d'=' | cut -f2 -d'_' | cut -f1 -d'.'`
-    ops_context="hst_${context_num}.pmap"
-    export CRDS_CONTEXT=$ops_context
-fi
-
-echo "CRDS_SERVER_URL: ${CRDS_SERVER_URL}"
-echo "CRDS_CONTEXT: ${CRDS_CONTEXT}"
-
+# check crds installation
 resp=`crds list --status`
 status=`echo $resp | cut -f1 -d'='`
 
@@ -32,6 +21,19 @@ if [[ -z $status ]]; then
     ./install && pip install -e .[submission,test,docs,synphot] 
     pip install --upgrade .["submission","test"]
 fi
+
+# set CRDS CONTEXT
+if [[ -z $CRDS_CONTEXT ]]; then
+    export CRDS_CONTEXT=hst-operational
+    summary=`crds list --status` 
+    context_num=`echo $summary | cut -f8 -d'=' | cut -f2 -d'_' | cut -f1 -d'.'`
+    ops_context="hst_${context_num}.pmap"
+    export CRDS_CONTEXT=$ops_context
+fi
+
+echo "CRDS_SERVER_URL: ${CRDS_SERVER_URL}"
+echo "CRDS_CONTEXT: ${CRDS_CONTEXT}"
+
 
 ./runtests
 cd $HOME

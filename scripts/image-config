@@ -18,3 +18,5 @@ export CRDS_TESTING_CACHE=${CRDS_TEST_ROOT}/crds-cache-test
 export CRDS_CONFIG_OFFSITE=1
 export CRDS_READONLY_CACHE=0
 export RUN_PARS="-it"
+# start container as root
+#export RUN_PARS="-it --privileged -u root"
