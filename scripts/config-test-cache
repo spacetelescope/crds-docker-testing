@@ -40,9 +40,16 @@ if [[ $SYNC_CACHE == 1 ]]; then
     fi
     hstlog=${HOME}/hstsync.log
     cd $CRDS_TEST_ROOT
-    set -o pipefail && $TIME --verbose -o $hstlog ${HOME}/scripts/hst-sync
+    if [[ "${CRDS_TEST_ROOT}" == "${HOME}/${TMP_CACHE}"]]; then
+        syncHST=${HOME}/scripts/hst-selective-sync
+        syncJWST=${HOME}/scripts/jwst-selective-sync
+    else
+        syncHST=${HOME}/scripts/hst-sync
+        syncJWST=${HOME}/scripts/jwst-sync
+    fi
+    set -o pipefail && $TIME --verbose -o $hstlog ${syncHST}
 
     jwstlog=${HOME}/jwstsync.log
-    set -o pipefail && $TIME --verbose -o $jwstlog ${HOME}/scripts/jwst-sync
+    set -o pipefail && $TIME --verbose -o $jwstlog ${syncJWST}
     cd $HOME
 fi
