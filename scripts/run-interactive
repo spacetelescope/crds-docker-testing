@@ -16,4 +16,4 @@ fi
 
 
 # Run the container
-docker run ${RUN_PARS} --ip 0.0.0.0 --hostname localhost -p 8889:8889 $MOUNTS $DOCKER_IMAGE $*
+docker run ${RUN_PARS} --ip 0.0.0.0 --hostname localhost -p 8888:8888 $MOUNTS $DOCKER_IMAGE $*
