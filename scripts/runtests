@@ -12,7 +12,10 @@ if [[ -z $CRDS_SERVER_URL ]]; then
 fi
 
 if [[ -z $CRDS_CONTEXT ]]; then
-    export CRDS_CONTEXT=hst_1048.pmap
+    summary=`crds list --status`
+    context_num=`echo $summary | cut -f8 -d'=' | cut -f2 -d'_' | cut -f1 -d'.'`
+    ops_context="hst_${context_num}.pmap"
+    export CRDS_CONTEXT=$ops_context
 fi
 
 echo "CRDS_SERVER_URL: ${CRDS_SERVER_URL}"
