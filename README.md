@@ -154,7 +154,7 @@ $ bash scripts/run-interactive
 developer@localhost:~$ scripts/runtests
 ```
 
-If you get "File Not Found" test failures, you may need to set a more recent CRDS context e.g. "hst_edit.pmap" or "jwst_edit.pmap" before running sync:
+If you get "File Not Found" test failures, you may need to set a more recent CRDS context e.g. "hst-operational" or "jwst-edit" before running sync:
 
 ```bash
 developer@localhost:~$ export CRDS_CONTEXT="jwst_1015.pmap"
