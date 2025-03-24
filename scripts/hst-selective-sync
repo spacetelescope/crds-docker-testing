@@ -42,7 +42,7 @@ refs=(l2d0959cj_pfl.fits
 	43h1240om_tmc.fits)
 
 export CRDS_SERVER_URL=https://hst-crds.stsci.edu
-export CRDS_CONTEXT=hst-latest
+export CRDS_CONTEXT=latest
 
 for ctx in ${contexts[@]}
 do
@@ -51,7 +51,7 @@ do
 done
 
 echo "Syncing current latest context"
-python -m crds.sync --contexts hst-latest --stats --log-time --check-sha1sum --repair-files --organize=flat
+python -m crds.sync --contexts latest --stats --log-time --check-sha1sum --repair-files --organize=flat
 
 echo "Syncing select reference files"
 python -m crds.sync --files ${refs[@]} --stats --log-time
