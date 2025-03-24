@@ -2,13 +2,13 @@
 source scripts/user-config
 
 # advanced settings
-export GH_USER="spacetelescope"
+export GH_USER="alphasentaurii"
 export CRDS_BRANCH="master"
 export IMAGE_REPO=alphasentaurii/crds-docker-testing
 export DOCKER_IMAGE=${IMAGE_REPO}:${IMAGE_TAG}
 export CRDS_REPO=https://github.com/${GH_USER}/crds
-export BASE=library/debian
-export BASE_TAG=bullseye-slim
+export BASE=debian
+export BASE_TAG=bookworm-slim
 export BASE_IMAGE=${BASE}:${BASE_TAG}
 export DEV_HOME="."
 export THOME=/home/developer
@@ -19,4 +19,4 @@ export CRDS_CONFIG_OFFSITE=1
 export CRDS_READONLY_CACHE=0
 export RUN_PARS="-it"
 # start container as root
-#export RUN_PARS="-it --privileged -u root"
+# export RUN_PARS="-it --privileged -u root"

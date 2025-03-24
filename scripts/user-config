@@ -12,7 +12,7 @@ export IMAGE_TAG="latest"
 ## "slim" : mount your existing test data directories (3.34 GB)
 # export IMAGE_TAG="slim"
 
-## enter a custom tag if building image (or use "latest")
+## enter a custom tag (e.g. 'dev') if building your own image (or use "latest")
 # export IMAGE_TAG=
 
 ##### test suite data #####

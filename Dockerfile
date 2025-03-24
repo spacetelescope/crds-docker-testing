@@ -1,6 +1,6 @@
 # syntax = docker/dockerfile:1.0-experimental
 
-ARG BASE_IMAGE=debian:bullseye-slim
+ARG BASE_IMAGE=debian:bookworm-slim
 FROM ${BASE_IMAGE}
 
 RUN apt update && \
@@ -64,7 +64,7 @@ ARG CRDS_READONLY_CACHE=0
 ENV CRDS_READONLY_CACHE=$CRDS_READONLY_CACHE
 ARG MAST_API_TOKEN
 ENV MAST_API_TOKEN=$MAST_API_TOKEN
-ARG CRDS_CONTEXT=hst-operational
+ARG CRDS_CONTEXT=hst-latest
 ENV CRDS_CONTEXT=$CRDS_CONTEXT
 ARG CRDS_SERVER_URL=https://hst-crds.stsci.edu
 ENV CRDS_SERVER_URL=$CRDS_SERVER_URL

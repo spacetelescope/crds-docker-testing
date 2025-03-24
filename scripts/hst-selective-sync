@@ -6,6 +6,9 @@ export CRDS_TESTING_CACHE=$CRDS_TEST_ROOT/crds-cache-test
 
 contexts=(hst.pmap 
 hst_0001.pmap
+hst_0018.pmap
+hst_0024.pmap
+hst_0268.pmap
 hst_0294.pmap
 hst_0315.pmap
 hst_0379.pmap
@@ -19,6 +22,7 @@ hst_0779.pmap
 hst_0857.pmap
 hst_0978.pmap
 hst_0980.pmap
+hst_1000.pmap
 hst_1099.pmap
 hst_acs_biasfile_0005.rmap
 hst_acs_biasfile_0250.rmap)
@@ -38,7 +42,7 @@ refs=(l2d0959cj_pfl.fits
 	43h1240om_tmc.fits)
 
 export CRDS_SERVER_URL=https://hst-crds.stsci.edu
-export CRDS_CONTEXT=hst-operational
+export CRDS_CONTEXT=hst-latest
 
 for ctx in ${contexts[@]}
 do
@@ -46,8 +50,8 @@ do
     python -m crds.sync --contexts $ctx --stats --log-time --check-sha1sum --repair-files --organize=flat
 done
 
-echo "Syncing current operational context"
-python -m crds.sync --contexts hst-operational --stats --log-time --check-sha1sum --repair-files --organize=flat
+echo "Syncing current latest context"
+python -m crds.sync --contexts hst-latest --stats --log-time --check-sha1sum --repair-files --organize=flat
 
 echo "Syncing select reference files"
 python -m crds.sync --files ${refs[@]} --stats --log-time
