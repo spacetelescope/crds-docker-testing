@@ -13,6 +13,8 @@ if [[ -z $TMP_CACHE ]]; then
     export CRDS_TEST_ROOT="${HOME}/${CACHE_SRC}"
 else
     export CRDS_TEST_ROOT="${HOME}/${TMP_CACHE}"
+    mkdir -p ${CRDS_TEST_ROOT}
+
 fi
 
 export CRDS_PATH=$CRDS_TEST_ROOT/crds-cache-default-test
@@ -40,7 +42,7 @@ if [[ $SYNC_CACHE == 1 ]]; then
     fi
     hstlog=${HOME}/hstsync.log
     cd $CRDS_TEST_ROOT
-    if [[ "${CRDS_TEST_ROOT}" == "${HOME}/${TMP_CACHE}"]]; then
+    if [ "${CRDS_TEST_ROOT}" == "${HOME}/${TMP_CACHE}"]; then
         syncHST=${HOME}/scripts/hst-selective-sync
         syncJWST=${HOME}/scripts/jwst-selective-sync
     else

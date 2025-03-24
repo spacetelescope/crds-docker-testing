@@ -6,7 +6,7 @@ if [[ -z $CRDS_SERVER_URL ]]; then
 fi
 
 if [[ -z $CRDS_CONTEXT ]]; then
-    CRDS_CONTEXT="hst-operational"
+    CRDS_CONTEXT="hst-latest"
 fi
 
 docker build -f Dockerfile -t ${DOCKER_IMAGE} \

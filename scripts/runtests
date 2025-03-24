@@ -6,8 +6,11 @@ source ${HOME}/scripts/image-config
 ${HOME}/scripts/config-cache-mount $CACHE_SRC
 
 if [[ -z $CRDS_SERVER_URL ]]; then
+    echo "Setting server url"
     export CRDS_SERVER_URL=https://hst-crds.stsci.edu
+    echo "CRDS SERVER URL set to: ${CRDS_SERVER_URL}"
 fi
+
 
 # check crds installation
 resp=`crds list --status`
@@ -24,11 +27,11 @@ fi
 
 # set CRDS CONTEXT
 if [[ -z $CRDS_CONTEXT ]]; then
-    export CRDS_CONTEXT=hst-operational
-    summary=`crds list --status` 
-    context_num=`echo $summary | cut -f8 -d'=' | cut -f2 -d'_' | cut -f1 -d'.'`
-    ops_context="hst_${context_num}.pmap"
-    export CRDS_CONTEXT=$ops_context
+    export CRDS_CONTEXT=hst-latest
+    # summary=`crds list --status` 
+    context_num=`echo $resp | cut -f8 -d'=' | cut -f2 -d'_' | cut -f1 -d'.'`
+    latest_context="hst_${context_num}.pmap"
+    export CRDS_CONTEXT=$latest_context
 fi
 
 echo "CRDS_SERVER_URL: ${CRDS_SERVER_URL}"

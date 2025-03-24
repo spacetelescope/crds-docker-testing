@@ -25,14 +25,14 @@ jwst_miri.imap)
 jwstrefs=(jwst_niriss_flat_0000.fits jwst_miri_flat_0006.fits)
 
 export CRDS_SERVER_URL=https://jwst-crds.stsci.edu
-export CRDS_CONTEXT=jwst-operational
+export CRDS_CONTEXT=jwst-latest
 for ctx in ${jwstcontexts[@]}
 do
     echo "Syncing mappings under ${ctx}"
     python -m crds.sync --contexts $ctx --stats --log-time --check-sha1sum --repair-files --organize=flat
 done
-echo "Syncing JWST current operational context"
-python -m crds.sync --contexts jwst-operational --stats --log-time --check-sha1sum --repair-files --organize=flat
+echo "Syncing JWST current latest context"
+python -m crds.sync --contexts jwst-latest --stats --log-time --check-sha1sum --repair-files --organize=flat
 echo "Syncing JWST select reference files"
 python -m crds.sync --files ${jwstrefs[@]} --stats --log-time
 
