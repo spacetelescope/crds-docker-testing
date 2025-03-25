@@ -9,3 +9,10 @@ logfile="${HOME}/sync.log"
 set -o pipefail && $TIME --verbose -o $logfile ${HOME}/scripts/config-test-cache $CACHE_SRC $DOWNLOAD_CACHE $SYNC_CACHE $TMP_CACHE
 sync_exit_status=$?
 echo "Sync exit status ${sync_exit_status}"
+
+if [[ -d ${HOME}/tmp_cache ]]; then
+    echo "Compressing CRDS test cache as tmp_cache.tgz"
+    tar -czvf tmp_cache.tgz tmp_cache/
+    chmod 777 tmp_cache.tgz
+    rm -rf tmp_cache/
+fi

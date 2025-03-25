@@ -40,14 +40,9 @@ if [[ $SYNC_CACHE == 1 ]]; then
         pip install --upgrade .["submission","test"] && cd $HOME
     fi
     hstlog=${HOME}/hstsync.log
+    syncHST=${HOME}/scripts/hst-sync
+    syncJWST=${HOME}/scripts/jwst-sync
     cd $CRDS_TEST_ROOT
-    if [[ "${CRDS_TEST_ROOT}" == "${HOME}/${TMP_CACHE}" ]]; then
-        syncHST=${HOME}/scripts/hst-selective-sync
-        syncJWST=${HOME}/scripts/jwst-selective-sync
-    else
-        syncHST=${HOME}/scripts/hst-sync
-        syncJWST=${HOME}/scripts/jwst-sync
-    fi
     echo "***** RUNNING HST SYNC: ${syncHST} *****"
     set -o pipefail && $TIME --verbose -o $hstlog ${syncHST}
 

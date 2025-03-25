@@ -2,8 +2,6 @@
 source scripts/user-config
 
 # advanced settings
-export GH_USER="alphasentaurii"
-export CRDS_BRANCH="master"
 export IMAGE_REPO=alphasentaurii/crds-docker-testing
 export DOCKER_IMAGE=${IMAGE_REPO}:${IMAGE_TAG}
 export CRDS_REPO=https://github.com/${GH_USER}/crds
@@ -17,6 +15,10 @@ export CRDS_PATH=${CRDS_TEST_ROOT}/crds-cache-default-test
 export CRDS_TESTING_CACHE=${CRDS_TEST_ROOT}/crds-cache-test
 export CRDS_CONFIG_OFFSITE=1
 export CRDS_READONLY_CACHE=0
-export RUN_PARS="-it"
-# start container as root
-# export RUN_PARS="-it --privileged -u root"
+
+if [[ "${IMAGE_TAG}" == "latest" ]]; then
+    export RUN_PARS="-it"
+else
+    # start container as root
+    export RUN_PARS="-it --privileged -u root"
+fi

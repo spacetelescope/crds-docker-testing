@@ -32,6 +32,8 @@ export CRDS_CONTEXT=""
 export CRDS_SERVER_URL=""
 
 ##### mounting CRDS client code #####
+export GH_USER="alphasentaurii"
+export CRDS_BRANCH="master"
 ## pathfinder script tries to find abs local paths of this repo and crds client
 ## for shared folder mounting into the container
 source scripts/pathfinder
