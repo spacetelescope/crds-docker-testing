@@ -1,5 +1,3 @@
-# syntax = docker/dockerfile:1.0-experimental
-
 ARG BASE_IMAGE=debian:bookworm-slim
 FROM ${BASE_IMAGE}
 
