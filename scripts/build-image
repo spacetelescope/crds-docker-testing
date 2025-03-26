@@ -11,14 +11,14 @@ fi
 
 docker build -f Dockerfile -t ${DOCKER_IMAGE} \
     --build-arg BASE_IMAGE=$BASE_IMAGE \
-    --build-arg CACHE_SRC=$CACHE_SRC \
     --build-arg DOWNLOAD=$DOWNLOAD \
     --build-arg SYNC=$SYNC \
     --build-arg CRDS_REPO=$CRDS_REPO \
     --build-arg CRDS_BRANCH=$CRDS_BRANCH \
     --build-arg MAST_API_TOKEN=$MAST_API_TOKEN \
     --build-arg CRDS_CONTEXT=$CRDS_CONTEXT \
-    --build-arg CRDS_PATH=$CRDS_PATH \
-    --build-arg CRDS_TEST_ROOT=$CRDS_TEST_ROOT \
     --build-arg CRDS_SERVER_URL=$CRDS_SERVER_URL \
+    --build-arg CACHE_SRC=$CACHE_SRC \
+    --build-arg CRDS_TEST_ROOT=$CRDS_TEST_ROOT \
+    --build-arg CRDS_PATH=$CRDS_PATH \
     .

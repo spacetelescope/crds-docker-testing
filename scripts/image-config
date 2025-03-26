@@ -10,15 +10,24 @@ export BASE_TAG=bookworm-slim
 export BASE_IMAGE=${BASE}:${BASE_TAG}
 export DEV_HOME="."
 export THOME=/home/developer
-export CRDS_TEST_ROOT=${THOME}/${CACHE_SRC}
-export CRDS_PATH=${CRDS_TEST_ROOT}/crds-cache-default-test
-export CRDS_TESTING_CACHE=${CRDS_TEST_ROOT}/crds-cache-test
-export CRDS_CONFIG_OFFSITE=1
-export CRDS_READONLY_CACHE=0
+
+##### test suite data #####
+# LATEST: If you don't have the crds test cache data or want to start fresh, set DOWNLOAD and SYNC = 1
+# For SLIM or custom image tag: container will expect test cache to be located inside the mounted "cache_volumes" directory at runtime
 
 if [[ "${IMAGE_TAG}" == "latest" ]]; then
+    export CACHE_SRC="crds_cache"
+    export DOWNLOAD=1 # clones github.com/spacetelescope/crds-test-cache
+    export SYNC=1 # syncs all mappings and select refs into crds-default-test-cache
     export RUN_PARS="-it"
 else
+    export CACHE_SRC="cache_volumes"
+    export DOWNLOAD=0
+    export SYNC=0
     # start container as root
     export RUN_PARS="-it --privileged -u root"
 fi
+
+export CRDS_TEST_ROOT=${THOME}/${CACHE_SRC}
+export CRDS_PATH=${CRDS_TEST_ROOT}/crds-cache-default-test
+export CRDS_TESTING_CACHE=${CRDS_TEST_ROOT}/crds-cache-test

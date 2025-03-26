@@ -7,4 +7,4 @@ cache_volumes/crds-cache-default-test
 cache_volumes/crds-cache-test
 cache_volumes/api-rkein
 cache_volumes/testdata
-cache_volumes/tmp_cache.tgz
+cache_volumes/*.tgz

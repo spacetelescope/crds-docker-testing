@@ -2,24 +2,23 @@
 source ${HOME}/scripts/hst-crds-config
 source ${HOME}/scripts/image-config
 
-# check for mounted test cache, otherwise use tmp_cache 
-tmpcache=${HOME}/tmp_cache
+# check for mounted test cache, otherwise use crds_cache
+cachemnt=${HOME}/cache_volumes
+localcache=${HOME}/crds_cache
 
-# if image was built with test cache (default/"latest") and mounted cache folder is empty,
-# untar and use tmp_cache, otherwise use the mounted directory ("cache_volumes") as test root
-if [[ ! -d "${CRDS_PATH}" && -d "${tmpcache}.tgz" ]]; then
-    tar -xzvf "${tmpcache}.tgz"
-    export CRDS_TEST_ROOT=${tmpcache}
+# if image was built with test cache (image_tag="latest") and mounted cache folder is empty,
+# untar and use crds_cache, otherwise use the mounted directory ("cache_volumes") as test root
+if [[ ! -d "${cachemnt}/crds-cache-default-test" && -e "${localcache}.tgz" ]]; then
+    tar -xzvf "${crdscache}.tgz"
+    export CRDS_TEST_ROOT=${localcache}
 else
-    export CRDS_TEST_ROOT=${HOME}/${CACHE_SRC}
+    export CRDS_TEST_ROOT=${cachemnt}
 fi
 
 export CRDS_PATH=${CRDS_TEST_ROOT}/crds-cache-default-test
 export CRDS_TESTING_CACHE=${CRDS_TEST_ROOT}/crds-cache-test
 
-
 if [[ -z $CRDS_SERVER_URL ]]; then
-    echo "Setting server url"
     export CRDS_SERVER_URL=https://hst-crds.stsci.edu
     echo "CRDS SERVER URL set to: ${CRDS_SERVER_URL}"
 fi
@@ -41,7 +40,6 @@ fi
 # set CRDS CONTEXT
 if [[ -z $CRDS_CONTEXT ]]; then
     export CRDS_CONTEXT=latest
-    # summary=`crds list --status` 
     context_num=`echo $resp | cut -f8 -d'=' | cut -f2 -d'_' | cut -f1 -d'.'`
     latest_context="hst_${context_num}.pmap"
     export CRDS_CONTEXT=$latest_context

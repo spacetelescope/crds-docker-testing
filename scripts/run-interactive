@@ -1,4 +1,5 @@
 #!/bin/bash -eu
+CONTAINERNAME=${1:-"unruffled_archimedes"}
 source scripts/image-config
 source scripts/hst-crds-config
 
@@ -8,12 +9,7 @@ else
     MOUNTS = ""
 fi
 
-if [[ "${CRDS_READONLY_CACHE}" == "1" && "${CACHE_SRC}" == "/grp/crds/hst" ]]; then
-    MOUNTS="${MOUNTS} --mount type=bind,source=$CACHE_SRC,target=/grp/crds/cache,readonly"
-else
-    MOUNTS="${MOUNTS} --mount type=bind,source="$(pwd)"/${CACHE_SRC},target=$CRDS_TEST_ROOT"
-fi
-
+MOUNTS="${MOUNTS} --mount type=bind,source="$(pwd)"/${CACHE_SRC},target=$CRDS_TEST_ROOT"
 
 # Run the container
-docker run ${RUN_PARS} -p 8000:8050 -p 8889:8889 $MOUNTS $DOCKER_IMAGE $*
+docker run --name $CONTAINERNAME ${RUN_PARS} -p 8000:8050 -p 8889:8889 $MOUNTS $DOCKER_IMAGE $*

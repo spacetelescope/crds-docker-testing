@@ -106,9 +106,11 @@ NOTE - you can still mount your own test cache into this image by placing it in 
 
 ### Option 2 (advanced): BUILD docker image locally
 
+The settings differ for "latest" and "slim" image tags, but keep in mind the scripts that use these default settings are for convenience. Anything can be overridden inside the container by modifying environment variables and also by using crds scripts directly. The key difference is that `latest` includes a built-in crds cache already downloaded, while `slim` does not. 
+
 *2A - Download and sync turned ON* 
 
-At image build time the `config-test-cache` script will try to download and sync test cache data similar to `crds/setup_test_cache`. This is turned ON by default. The Sync process can take up to ~21 mins depending on your internet connection:
+At image build time the `config-test-cache` script will download and sync test cache data similar to `crds/setup_test_cache`. This is turned ON by default for the "latest" image tag. The Sync process can take up to ~21 mins depending on your internet connection:
 
 ```bash
 $ vi scripts/user-config
@@ -116,22 +118,27 @@ $ vi scripts/user-config
 ########## scripts/user-config ##########
 # tag can be anything you want when building image
 export IMAGE_TAG="latest"
-export DOWNLOAD=1
-export SYNC=1
 ########################################
 ```
 
+Default settings for "latest" image_tag:
+
+- cache folder = "/home/developer/crds_cache"
+- This folder is created and synced at image build time
+- A compressed (.tgz) archive of the cache is created and the folder deleted during image build
+- At container runtime, the archive is extracted and used as CRDS_PATH for tests
+- The built-in cache can be updated (synced again) with CRDS using the sync-test-cache script from inside a running container, e.g.: `scripts/sync-test-cache crds_cache 0 1`
+
+
 *2B - Download and sync turned OFF* 
 
-If you already have  `crds-cache-default-test` and `crds-cache-test` installed locally and want to mount these into the container instead of redownloading, resyncing, set DOWNLOAD=0, SYNC=0 then move/copy these directories into the "cache_volumes" folder.
+If you already have  `crds-cache-default-test` and `crds-cache-test` installed locally and want to mount these into the container instead of redownloading, resyncing, set DOWNLOAD=0, SYNC=0 then move/copy these directories into the "cache_volumes" folder. If your test cache isn't up to date, you can simply set `export SYNC=1` once you're inside the container and run the sync-test-cache script
 
 ```bash
 $ vi scripts/user-config
 ########## scripts/user-config ##########
 # tag can be anything you want when building image
 export IMAGE_TAG="slim"
-export DOWNLOAD=0
-export SYNC=0
 ########################################
 ```
 
@@ -140,6 +147,14 @@ Once the settings are configured, build the image:
 ```bash
 $ bash scripts/build-image
 ```
+
+Default settings for "slim" image_tag:
+
+- cache folder = "/home/developer/cache_volumes"
+- This folder is mounted at container run time
+- tests will expect contents of this folder to include crds-cache-test and crds-cache-default-test
+- The mounted cache directories can be synced/updated with CRDS using the sync-test-cache script from inside a running container, e.g.: `scripts/sync-test-cache cache_volumes 0 1`
+
 
 ### 3. Run the container
 
@@ -153,6 +168,11 @@ $ bash scripts/run-interactive
 # Run the test suite (from inside running container)
 developer@localhost:~$ scripts/runtests
 ```
+
+Note: you may want to run a subset of tests using pytest markers. To do this, just make sure you have the right environment variables set (i.e. CRDS_TEST_ROOT, CRDS_PATH, etc are set to the desired paths), cd into `crds` and run e.g. `pytest -m roman`
+
+
+### 5. Troubleshooting
 
 If you get "File Not Found" test failures, you may need to set a more recent CRDS context e.g. "latest" or "jwst-edit" before running sync:
 

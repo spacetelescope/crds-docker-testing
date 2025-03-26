@@ -1,40 +1,19 @@
 #!/bin/bash
 
-# CRDS_READONLY_CACHE = 0 (DEFAULT - used for testing)
-# CRDS_CONFIG_OFFSITE (custom crds cache source)
 # This is useful offsite when working on a small scale with a personal computer.
 # Because this downloads CRDS files directly to a local cache,  once downloaded
 # files are accessed from local disk rather than from VPN or the CRDS server,
 # avoiding repeat downloads of potentially gigabytes of data.
 
-# READONLY = 1
-# CRDS_CONFIG_ONSITE ( CRDS_PATH=/grp/crds/cache - read only)
-# This is most useful onsite at STScI. This mode should be as scalable as the
-# Central Store but will suffer from repeat downloads via VPN if Central Store
-# files are not effectively cached on offsite computers.
-
-if [[ "${CRDS_READONLY_CACHE}" == 0||""||"0" ]]; then
-    # Configure CRDS for offsite use with a dynamic reference file cache.
-    export CRDS_READONLY_CACHE=0
-    export CRDS_SERVER_URL="https://hst-crds.stsci.edu"
-    # export CRDS_PATH=${HOME}/cache_volumes
-    export iref=${CRDS_PATH}/references/hst/wfc3/
-    export jref=${CRDS_PATH}/references/hst/acs/
-    export oref=${CRDS_PATH}/references/hst/stis/
-    export lref=${CRDS_PATH}/references/hst/cos/
-    export nref=${CRDS_PATH}/references/hst/nicmos/
-    export uref=${CRDS_PATH}/references/hst/wfcpc2/
-    export uref_linux=$uref
-else
-    # Configure CRDS for HST serverless mode using readonly /grp/crds/cache
-    export CRDS_READONLY_CACHE=1
-    export CRDS_PATH=/grp/crds/hst
-    export CRDS_SERVER_URL=https://hst-serverless-mode.stsci.edu
-    export iref=${CRDS_PATH}/references/hst/
-    export jref=${CRDS_PATH}/references/hst/
-    export oref=${CRDS_PATH}/references/hst/
-    export lref=${CRDS_PATH}/references/hst/
-    export nref=${CRDS_PATH}/references/hst/
-    export uref=${CRDS_PATH}/references/hst/
-    export uref_linux=$uref
-fi
+# Configure CRDS for offsite use with a dynamic reference file cache.
+export CRDS_READONLY_CACHE=0
+export CRDS_CONFIG_OFFSITE=1
+export CRDS_SERVER_URL="https://hst-crds.stsci.edu"
+# export CRDS_PATH=${HOME}/cache_volumes
+export iref=${CRDS_PATH}/references/hst/wfc3/
+export jref=${CRDS_PATH}/references/hst/acs/
+export oref=${CRDS_PATH}/references/hst/stis/
+export lref=${CRDS_PATH}/references/hst/cos/
+export nref=${CRDS_PATH}/references/hst/nicmos/
+export uref=${CRDS_PATH}/references/hst/wfcpc2/
+export uref_linux=$uref
