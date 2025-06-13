@@ -28,24 +28,8 @@ Steps:
 
 ### 1. Clone Repo
 
-Clone this repo into the same parent directory as your CRDS client code so they are at the same directory level, or set the path to your CRDS client code explicitly by editing `scripts/user-config`.
+Clone this repo into the same parent directory as your CRDS client code so they are at the same directory level, or set the path to your CRDS client code explicitly by editing `.env` and setting `CRDS_ROOT` to the absolute path of your repo folder. (NOTE this is assuming you want to mount the crds repo into the running container, which allows you to make on the fly changes using your IDE).
 
-```bash
-cd /path/to/crds/parentdir/
-# feel free to fork this repo instead
-git clone https://github.com/spacetelescope/crds-docker-testing
-cd crds-docker-testing
-```
-
-If your CRDS client code is not in the same parent directory as this repo, set the path to CRDS explicitly and comment out the line that says `source scripts/pathfinder`:
-
-```bash
-$ vi scripts/user-config
-########## scripts/user-config ##########
-# source scripts/pathfinder
-export CRDS_ROOT=/abs/path/to/my/crds/client/code
-export SHOME=/top/path/to/this/repo
-```
 
 ### 2. Configure Settings
 
@@ -116,17 +100,16 @@ Default settings for "latest" image_tag:
 If you already have  `crds-cache-default-test` and `crds-cache-test` installed locally and want to mount these into the container instead of redownloading, resyncing, set DOWNLOAD=0, SYNC=0 then move/copy these directories into the "cache_volumes" folder. If your test cache isn't up to date, you can simply set `export SYNC=1` once you're inside the container and run the sync-test-cache script
 
 ```bash
-$ vi scripts/user-config
-########## scripts/user-config ##########
-# tag can be anything you want when building image
-export IMAGE_TAG="slim"
+$ vi .env # assuming you've already copied it from .env.template
+########## .env ##########
+IMAGE_TAG="slim"
 ########################################
 ```
 
 Once the settings are configured, build the image:
 
 ```bash
-$ bash scripts/build-image
+$ scripts/build-image
 ```
 
 Default settings for "slim" image_tag:
@@ -140,7 +123,7 @@ Default settings for "slim" image_tag:
 ### 3. Run the container
 
 ```bash
-$ bash scripts/run-interactive
+$ scripts/run-interactive
 ```
 
 ### 4. Run the test suite
