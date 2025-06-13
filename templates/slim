@@ -1,0 +1,5 @@
+#!/bin/bash
+export CACHE_SRC="cache_volumes"
+export DOWNLOAD=0
+export SYNC=0
+export RUN_PARS="-it --privileged -u root" # start container as root

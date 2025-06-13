@@ -11,15 +11,17 @@ Steps:
 
     1. Clone this repo
 
-    2. Configure settings in `scripts/user-config` as needed:
+    2. Copy '.env.template' to a new file named '.env'. Configure settings as needed:
     
-        a. use built-in test cache (4.26GB)
+        a. use built-in test cache (4.26GB) --> set IMAGE_TAG="latest"
 
-        b. mount your own existing test cache (3.34GB)
+        b. mount your own existing test cache (3.34GB) --> set IMAGE_TAG="slim"
 
-    3. Pull or Build image
+        c. mount existing cache and create a custom image (advanced) --> set IMAGE_TAG to your custom tag
 
-    4. Run container
+    3. Pull image (`scripts/pull-image`) or Build image (`scripts/build-image`)
+
+    4. Run container: `scripts/run-interactive`
 
     5. Run test suite
 
@@ -47,19 +49,20 @@ export SHOME=/top/path/to/this/repo
 
 ### 2. Configure Settings
 
+Copy '.env.template' to a new file named '.env'. 
 If mounting your own test cache data, move/copy these directories into the "cache_volumes" folder:
 
     * crds-cache-test
     * crds-cache-default-test
-
-These (and anything else you place inside "cache_volumes") will be mounted into the container at runtime. You can always re-sync if necessary from inside the container.
 
 ```bash
 $ mv crds-cache-default-test/ crds-docker-testing/cache_volumes/.
 $ mv crds-cache-test/ crds-docker-testing/cache_volumes/.
 ```
 
-Edit `scripts/user-config` to select an image tag and configure any additional settings:
+These (and anything else you place inside "cache_volumes") will be mounted into the container at runtime. You can always re-sync if necessary from inside the container.
+
+Edit `.env` to select an image tag and configure any additional settings:
 
     * "latest" : built-in test data
     * "slim" : no test data (mount your own)
@@ -75,19 +78,6 @@ If you don't have any test cache data or want to start with a fresh new copy.
 
 If you already have an existing test cache.
 
-
-```bash
-$ vi scripts/user-config
-
-##### image tag #####
-# Remove # to select image tag ("latest", "slim", or custom) and comment out the others
-
-export IMAGE_TAG="latest"
-# export IMAGE_TAG="slim"
-
-## custom tag if building image (fine to use "latest")
-# export IMAGE_TAG=
-```
 
 ### 3. Pull or Build the docker image
 
@@ -110,16 +100,7 @@ The settings differ for "latest" and "slim" image tags, but keep in mind the scr
 
 *2A - Download and sync turned ON* 
 
-At image build time the `config-test-cache` script will download and sync test cache data similar to `crds/setup_test_cache`. This is turned ON by default for the "latest" image tag. The Sync process can take up to ~21 mins depending on your internet connection:
-
-```bash
-$ vi scripts/user-config
-
-########## scripts/user-config ##########
-# tag can be anything you want when building image
-export IMAGE_TAG="latest"
-########################################
-```
+At image build time the `sync-test-cache` script will download and sync test cache data similar to `crds/setup_test_cache`. This is turned ON by default for the "latest" image tag. The Sync process can take up to ~21 mins depending on your internet connection.
 
 Default settings for "latest" image_tag:
 

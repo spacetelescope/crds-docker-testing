@@ -1,6 +1,6 @@
 #!/bin/bash
 source ${HOME}/scripts/hst-crds-config
-source ${HOME}/scripts/image-config
+# source ${HOME}/scripts/image-config
 
 # check for mounted test cache, otherwise use crds_cache
 cachemnt=${HOME}/cache_volumes
@@ -9,7 +9,7 @@ localcache=${HOME}/crds_cache
 # if image was built with test cache (image_tag="latest") and mounted cache folder is empty,
 # untar and use crds_cache, otherwise use the mounted directory ("cache_volumes") as test root
 if [[ ! -d "${cachemnt}/crds-cache-default-test" && -e "${localcache}.tgz" ]]; then
-    tar -xzvf "${crdscache}.tgz"
+    tar -xzvf "${localcache}.tgz"
     export CRDS_TEST_ROOT=${localcache}
 else
     export CRDS_TEST_ROOT=${cachemnt}

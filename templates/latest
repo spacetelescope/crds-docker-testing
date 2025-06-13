@@ -1,0 +1,5 @@
+#!/bin/bash
+export CACHE_SRC="crds_cache"
+export DOWNLOAD=1 # clones github.com/spacetelescope/crds-test-cache
+export SYNC=1 # syncs all mappings and select refs into crds-default-test-cache
+export RUN_PARS="-it --privileged -u root" #"-it"

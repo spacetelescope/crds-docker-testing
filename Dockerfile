@@ -28,10 +28,6 @@ RUN apt update && \
 RUN useradd -s /bin/bash -m developer && usermod -aG sudo developer
 ENV DEV_HOME=/home/developer
 
-RUN wget --quiet --output-document - http://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/cfitsio-3.49.tar.gz | tar -xz -C $DEV_HOME && cd $DEV_HOME/cfitsio-3.49 && ./configure --prefix=/usr/local --enable-reentrant --disable-curl && make shared && make install
-
-RUN wget --quiet --output-document - https://heasarc.gsfc.nasa.gov/docs/software/ftools/fitsverify/fitsverify-4.20.tar.gz | tar -xz -C $DEV_HOME && cd $DEV_HOME/fitsverify-4.20 && gcc -o fitsverify ftverify.c fvrf_data.c fvrf_file.c fvrf_head.c fvrf_key.c fvrf_misc.c -DSTANDALONE -lcfitsio && cp fitsverify /usr/local/bin
-
 USER developer
 WORKDIR /home/developer
 RUN python3 -m venv /home/developer/venv
@@ -56,8 +52,10 @@ USER developer
 WORKDIR /home/developer
 RUN cd crds && ./install --dev && cd $DEV_HOME
 # Set ENVIRONMENT vars
-ENV CRDS_CONFIG_OFFSITE=1
-ENV CRDS_READONLY_CACHE=0
+ARG CRDS_CONFIG_OFFSITE=1
+ENV CRDS_CONFIG_OFFSITE=$CRDS_CONFIG_OFFSITE
+ARG CRDS_READONLY_CACHE=0
+ENV CRDS_READONLY_CACHE=$CRDS_READONLY_CACHE
 ARG MAST_API_TOKEN
 ENV MAST_API_TOKEN=$MAST_API_TOKEN
 ARG CRDS_CONTEXT=latest

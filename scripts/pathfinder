@@ -1,27 +1,47 @@
 #!/bin/bash
+CRDS_ROOT=${1:-""}
+
 base=`basename $(pwd)`
 if [[ "${base}" == scripts ]]; then
     dpath=`dirname $(pwd)`
     echo $dpath
+elif [[ "${base}" == crds-docker-testing|| "${base}" == developer ]]; then
+    dpath=`pwd`
+else
+    echo "Run this script from root directory of crds-docker-testing repo and try again."
+    exit 1
 fi
 
-if [[ "${base}" == crds-docker-testing||developer ]]; then
-        dpath=`pwd`
-        echo $dpath
-fi
+echo "Path to this repo: ${dpath}"
 
-
-crds_repo_path="`dirname ${dpath}`/crds"
-if [[ ! -d $crds_repo_path ]]; then
-    crds_repo_path="${dpath}/crds"
-    if [[ ! -d $crds_repo_path ]]; then
-        echo "CRDS repo path does not exist"
-    else
-        echo "CRDS repo path found" && echo $crds_repo_path
+if [[ -z $CRDS_ROOT ]]; then
+    parent=`dirname $dpath`
+    gparent=`dirname $parent`
+    checkpaths=( $parent $gparent $dpath )
+    for p in ${checkpaths[@]}
+    do
+        crds_repo_path="${p}/crds"
+        if [[ -d $crds_repo_path ]]; then
+            echo "CRDS repo path found: ${crds_repo_path}"
+            export CRDS_ROOT=$crds_repo_path
+            break
+        fi
+    done
+    # still haven't found crds client - assumes not mounting
+    if [[ -z $CRDS_ROOT ]]; then
+        CRDS_ROOT="none"
     fi
 else
-    echo "CRDS repo path found" && echo $crds_repo_path
+    # verify existence of CRDS_ROOT
+    crds_repo_path=$CRDS_ROOT
+    if [[ -d $crds_repo_path ]]; then
+        echo "CRDS repo path found: ${crds_repo_path}"
+    elif [[ "${crds_repo_path}" == "none" ]]; then
+        echo "CRDS_ROOT=${crds_repo_path} - skipping mount"
+    else
+        echo "Path does not exist: ${crds_repo_path} - Please revise and try again."
+    fi
 fi
 
-export SHOME=${dpath}
+export SHOME=$dpath
 export CRDS_ROOT=$crds_repo_path

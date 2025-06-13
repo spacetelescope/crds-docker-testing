@@ -1,7 +1,6 @@
 #!/bin/bash -eu
 CONTAINERNAME=${1:-"unruffled_archimedes"}
 source scripts/image-config
-source scripts/hst-crds-config
 
 if [[ "${CRDS_ROOT}" != "none" ]]; then
     MOUNTS="--mount type=bind,source=$CRDS_ROOT,target=/home/developer/crds"
@@ -11,5 +10,13 @@ fi
 
 MOUNTS="${MOUNTS} --mount type=bind,source="$(pwd)"/${CACHE_SRC},target=$CRDS_TEST_ROOT"
 
-# Run the container
-docker run --name $CONTAINERNAME ${RUN_PARS} -p 8000:8050 -p 8889:8889 $MOUNTS $DOCKER_IMAGE $*
+existing=`docker ps -aqf "name=unruffled_archimedes"`
+
+if [[ -z $existing ]]; then
+    # Run the container
+    docker run --name $CONTAINERNAME ${RUN_PARS} -p 8000:8050 -p 8889:8889 $MOUNTS $DOCKER_IMAGE
+else
+    # shell into existing container
+    docker container start $CONTAINERNAME
+    docker container exec ${RUN_PARS} $CONTAINERNAME /bin/bash
+fi

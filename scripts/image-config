@@ -1,7 +1,23 @@
 #!/bin/bash
-source scripts/user-config
+#!/bin/bash
+###########################################
+# USER SETTINGS - configure these as needed
+###########################################
+if [[ ! -f .env ]]; then
+    echo ".env file not found - using template"
+    cp .env.template .env
+fi
 
-# advanced settings
+source .env
+export IMAGE_TAG=$IMAGE_TAG
+export MAST_API_TOKEN=$MAST_API_TOKEN
+export CRDS_CONTEXT=$CRDS_CONTEXT
+export CRDS_SERVER_URL=$CRDS_SERVER_URL
+export GH_USER=$GH_USER
+export CRDS_BRANCH=$CRDS_BRANCH
+export CRDS_SERVER_URL=$CRDS_SERVER_URL
+source scripts/pathfinder $CRDS_ROOT
+
 export IMAGE_REPO=alphasentaurii/crds-docker-testing
 export DOCKER_IMAGE=${IMAGE_REPO}:${IMAGE_TAG}
 export CRDS_REPO=https://github.com/${GH_USER}/crds
@@ -11,21 +27,13 @@ export BASE_IMAGE=${BASE}:${BASE_TAG}
 export DEV_HOME="."
 export THOME=/home/developer
 
-##### test suite data #####
-# LATEST: If you don't have the crds test cache data or want to start fresh, set DOWNLOAD and SYNC = 1
-# For SLIM or custom image tag: container will expect test cache to be located inside the mounted "cache_volumes" directory at runtime
-
-if [[ "${IMAGE_TAG}" == "latest" ]]; then
-    export CACHE_SRC="crds_cache"
-    export DOWNLOAD=1 # clones github.com/spacetelescope/crds-test-cache
-    export SYNC=1 # syncs all mappings and select refs into crds-default-test-cache
-    export RUN_PARS="-it"
+if [[ "${IMAGE_TAG}" == "latest" || "${IMAGE_TAG}" == "slim" ]]; then
+    source templates/${IMAGE_TAG}
 else
-    export CACHE_SRC="cache_volumes"
-    export DOWNLOAD=0
-    export SYNC=0
-    # start container as root
-    export RUN_PARS="-it --privileged -u root"
+    export CACHE_SRC=$CACHE_SRC #"cache_volumes"
+    export DOWNLOAD=$DOWNLOAD
+    export SYNC=$SYNC
+    export RUN_PARS=$RUN_PARS
 fi
 
 export CRDS_TEST_ROOT=${THOME}/${CACHE_SRC}

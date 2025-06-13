@@ -6,6 +6,11 @@ COMPRESS=${4:-0}
 TIME=/usr/bin/time
 logfile="${HOME}/sync.log"
 
+if [[ "${CACHE_SRC}" == "/grp/crds/cache" ]]; then
+    echo "Readonly cache - skipping"
+    exit
+fi
+
 export CRDS_TEST_ROOT="${HOME}/${CACHE_SRC}"
 if [[ ! -d $CRDS_TEST_ROOT ]]; then
     mkdir -p ${CRDS_TEST_ROOT}
