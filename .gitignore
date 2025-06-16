@@ -12,3 +12,4 @@ cache_volumes/tmp_cache
 cache_volumes/crds_cache
 .env
 .env.bk
+*.dockercontext

@@ -9,7 +9,8 @@ localcache=${HOME}/crds_cache
 # if image was built with test cache (image_tag="latest") and mounted cache folder is empty,
 # untar and use crds_cache, otherwise use the mounted directory ("cache_volumes") as test root
 if [[ ! -d "${cachemnt}/crds-cache-default-test" && -e "${localcache}.tgz" ]]; then
-    tar -xzvf "${localcache}.tgz"
+    echo "decompressing cache archive - please wait a moment..."
+    tar -xzf "${localcache}.tgz"
     export CRDS_TEST_ROOT=${localcache}
 else
     export CRDS_TEST_ROOT=${cachemnt}

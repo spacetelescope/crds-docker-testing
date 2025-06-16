@@ -27,6 +27,8 @@ RUN apt update && \
 
 RUN useradd -s /bin/bash -m developer && usermod -aG sudo developer
 ENV DEV_HOME=/home/developer
+ADD scripts/ ${DEV_HOME}/scripts
+RUN chown -R developer:developer /home/developer && chmod +x /home/developer/scripts/*
 
 USER developer
 WORKDIR /home/developer
@@ -37,20 +39,12 @@ COPY requirements.txt ${DEV_HOME}/.
 RUN pip install --upgrade pip && \
     pip install -r ${DEV_HOME}/requirements.txt && \
     pip uninstall --yes crds
-
-WORKDIR /home/developer
-# CRDS client repo, crds cache folder, crds test cache "default" folder
-ADD scripts/ ${DEV_HOME}/scripts
-# editable install (for making changes on the fly)
+COPY .env ${DEV_HOME}/.
+# clone CRDS client repo
 ARG CRDS_REPO=https://github.com/spacetelescope/crds
 ARG CRDS_BRANCH=master
-RUN git clone --branch $CRDS_BRANCH ${CRDS_REPO}.git
-USER root
-RUN chown -R developer:developer /home/developer && chmod +x /home/developer/scripts/*
 # run test cache setup
-USER developer
-WORKDIR /home/developer
-RUN cd crds && ./install --dev && cd $DEV_HOME
+RUN git clone --branch $CRDS_BRANCH ${CRDS_REPO}.git && cd crds && ./install --dev && cd $DEV_HOME
 # Set ENVIRONMENT vars
 ARG CRDS_CONFIG_OFFSITE=1
 ENV CRDS_CONFIG_OFFSITE=$CRDS_CONFIG_OFFSITE
@@ -62,7 +56,6 @@ ARG CRDS_CONTEXT=latest
 ENV CRDS_CONTEXT=$CRDS_CONTEXT
 ARG CRDS_SERVER_URL=https://hst-crds.stsci.edu
 ENV CRDS_SERVER_URL=$CRDS_SERVER_URL
-
 ARG CACHE_SRC=cache_volumes
 ENV CACHE_SRC=$CACHE_SRC
 ARG CRDS_TEST_ROOT=/home/developer/$CACHE_SRC

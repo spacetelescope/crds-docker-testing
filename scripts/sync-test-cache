@@ -57,7 +57,7 @@ if [[ -d "${HOME}/crds_cache" && "${COMPRESS}" == 1 ]]; then
         rm ${HOME}/crds_cache.tgz
     fi
     echo "Compressing CRDS test cache as crds_cache.tgz"
-    tar -czvf crds_cache.tgz crds_cache/
+    tar -czf crds_cache.tgz crds_cache/
     chmod 777 crds_cache.tgz
     rm -rf crds_cache/
 fi

@@ -13,9 +13,9 @@ Steps:
 
     2. Copy '.env.template' to a new file named '.env'. Configure settings as needed:
     
-        a. use built-in test cache (4.26GB) --> set IMAGE_TAG="latest"
+        a. use built-in test cache (2.85GB) --> set IMAGE_TAG="latest"
 
-        b. mount your own existing test cache (3.34GB) --> set IMAGE_TAG="slim"
+        b. mount your own existing test cache --> set IMAGE_TAG="slim"
 
         c. mount existing cache and create a custom image (advanced) --> set IMAGE_TAG to your custom tag
 

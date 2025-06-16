@@ -8,9 +8,11 @@ else
     MOUNTS = ""
 fi
 
-MOUNTS="${MOUNTS} --mount type=bind,source="$(pwd)"/${CACHE_SRC},target=$CRDS_TEST_ROOT"
 
-existing=`docker ps -aqf "name=unruffled_archimedes"`
+MOUNTS="${MOUNTS} --mount type=bind,source="$(pwd)"/cache_volumes,target=/home/developer/cache_volumes"
+
+
+existing=`docker ps -aqf "name=${CONTAINERNAME}"`
 
 if [[ -z $existing ]]; then
     # Run the container
